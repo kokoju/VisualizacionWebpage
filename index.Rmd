@@ -1,7 +1,9 @@
+library(readxl)
+data <- read_excel("estadsticaspoliciales2025.xls")
+
 ---
-title: "index"
-author: "Juan Andrés Bastidas and Allan Chen"
-date: "`r Sys.Date()`"
+title: "Estadísticas Policiales, visualizadas"
+author: "Juan Andrés Bastidas y Allan Chen"
 output: html_document
 ---
 
@@ -9,22 +11,23 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Introducción
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Tanto en Costa Rica como en el mundo entero, el crimen está a la orden del día. Para llevar un expediente sobre estos y mostrarse transparentes ante la población costarricense, el Organismo de Investigación Judicial (OIJ) publica un informe sobre cada crimen, acompañado de su fecha, su perpetuador e incluso las víctimas de respectivo crimen <https://sitiooij.poder-judicial.go.cr/index.php/ayuda/servicios-policiales/servicios-a-organizaciones/indice-de-transparencia-del-sector-publico-costarricense/datos-abiertos>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
+```{r data}
+summary(data)
 ```
 
 ## Including Plots
 
-You can also embed plots, for example:
+Distribucion de delitos por provincia:
 
 ```{r pressure, echo=FALSE}
-plot(pressure)
+ggplot(data = data, aes(x = Provincia)) +
+    geom_bar(fill = "steelblue") +
+    labs(title = "Distribución de Delitos por Provincia", x = "Provincia", y = "Cantidad")
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
