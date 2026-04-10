@@ -1,6 +1,3 @@
-library(readxl)
-data <- read_excel("estadsticaspoliciales2025.xls")
-
 ---
 title: "Estadísticas Policiales, visualizadas"
 author: "Juan Andrés Bastidas y Allan Chen"
@@ -9,25 +6,46 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(readxl)
+library(ggplot2)
+stats <- read_excel("estadsticaspoliciales2025.xls")
 ```
 
 ## Introducción
 
-Tanto en Costa Rica como en el mundo entero, el crimen está a la orden del día. Para llevar un expediente sobre estos y mostrarse transparentes ante la población costarricense, el Organismo de Investigación Judicial (OIJ) publica un informe sobre cada crimen, acompañado de su fecha, su perpetuador e incluso las víctimas de respectivo crimen <https://sitiooij.poder-judicial.go.cr/index.php/ayuda/servicios-policiales/servicios-a-organizaciones/indice-de-transparencia-del-sector-publico-costarricense/datos-abiertos>.
+Tanto en Costa Rica como en el mundo entero, el crimen está a la orden del día. Para llevar un expediente sobre estos y mostrarse transparentes ante la población costarricense, el Organismo de Investigación Judicial (OIJ) publica un informe sobre cada crimen, acompañado de su fecha, su perpetuador, su lugar de incidencia e incluso las víctimas de respectivo crimen. En este documento, nos interesaremos en el análisis de estos datos, además de presentar las gráficas que mayor información pueden darle al costarricense promedio.
 
 
-```{r data}
-summary(data)
-```
+## Gráficos univariables (una sola variable)
 
-## Including Plots
-
-Distribucion de delitos por provincia:
-
-```{r pressure, echo=FALSE}
-ggplot(data = data, aes(x = Provincia)) +
+Distribucion de delitos por provincia (ordenados):
+```{r echo=TRUE}
+ggplot(data = stats, aes(x = reorder(Provincia, Provincia, FUN = length))) +
     geom_bar(fill = "steelblue") +
-    labs(title = "Distribución de Delitos por Provincia", x = "Provincia", y = "Cantidad")
+    labs(title = "Distribución de delitos por provincia", x = "Provincia", y = "Cantidad") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Al analizar esta gráfica, podemos observar que la gran mayoría de casos ocurren en San José: la capital de nuestro país. En esta provincia, se sobrepasan los 15 mil delitos, oponiéndose a las otras provincias que no llegan ni a los 10 mil. La diferencia es tan notoria que los casos en San José sobrepasan los casos de las 2 provincias anteriores combinadas (Puntarenas y Alajuela)
+
+Distribución de delitos por categoría (ordenados):
+```{r echo=TRUE}
+ggplot(data = stats, aes(x = reorder(Delito, Delito, FUN = length))) +
+    geom_bar(fill = "coral") +
+    coord_flip() +
+    labs(title = "Cantidad de delitos por categoría", x = "Delitos", y = "Cantidad")
+```
+
+Observamos que el tipo de delito más común es el hurto (llegando a casi 12 mil casos), seguido por los asaltos y los robos. Alto en la tabla encontramos también los delitos cometidos en relación a los vehiculos, como lo son la tacha de vehículos y el robo de los mismos.
+
+```{r echo=TRUE}
+ggplot(data = stats, aes(x = Hora)) +
+    geom_bar(fill = "green") +
+    labs(title = "Víctimas por Hora", x = "Hora", y = "Cantidad") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+xd
+
+## Referencias
+<https://sitiooij.poder-judicial.go.cr/index.php/ayuda/servicios-policiales/servicios-a-organizaciones/indice-de-transparencia-del-sector-publico-costarricense/datos-abiertos>
