@@ -8,44 +8,109 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(readxl)
 library(ggplot2)
+library(plotly)
+library(dplyr)
 stats <- read_excel("estadsticaspoliciales2025.xls")
 ```
 
 ## Introducción
 
-Tanto en Costa Rica como en el mundo entero, el crimen está a la orden del día. Para llevar un expediente sobre estos y mostrarse transparentes ante la población costarricense, el Organismo de Investigación Judicial (OIJ) publica un informe sobre cada crimen, acompañado de su fecha, su perpetuador, su lugar de incidencia e incluso las víctimas de respectivo crimen. En este documento, nos interesaremos en el análisis de estos datos, además de presentar las gráficas que mayor información pueden darle al costarricense promedio.
+Tanto en Costa Rica como en el mundo entero, el crimen está a la orden del día. Para llevar un expediente sobre estos y mostrarse transparentes ante la población costarricense, el Organismo de Investigación Judicial (OIJ) publica un informe sobre cada crimen, acompañado de información interesante sobre cada uno. Hoy, nos interesaremos en el análisis de estos datos, además de presentar las gráficas que mayor información pueden darle al costarricense promedio.
+
+## Descripción del problema
+
+En los últimos años, la percepción de inseguridad en Costa Rica ha aumentado considerablemente, impulsada por el aumento de la cantidad de delitos y la cobertura mediática de los mismos. Sin embargo, para el costarricense promedio, puede resultar complicado comprender la magnitud del problema debido a la falta de datos sintetizados para mejorar su comprensión.
+
+Pese a publicar datos sobre los delitos que se cometen en nuestro país, el OIJ no necesariamente los está presentando de manera accesible o sencilla de interpretar, aumentando la enorme brecha entre la información disponible y el conocimiento que posee la población acerca del presente tema.
+
+Este trabajo aborda entonces la falta de visualización clara por medio de gráficos sencillos y análisis comprensibles sobre los datos criminales en Costa Rica, ayudando al costarricense a comprender la situación que atraviesa su país con respecto a la seguridad. 
+
+
+## Definición y fuentes de datos
+Para el desarrollo de este análisis, se utilizarán datos proporcionados por el OIJ ,los cuales contienen registros detallados sobre los crímenes cometidos durante el año 2025. Estos contienen información sumamente variada, como lo pueden ser: fechas sobre cada incidente, tipo de delito, provincia donde se cometió el delito, sexo, edad y origen del perpetuador, etc...
+La fuente seleccionada se considera confiable debido a su carácter oficial y su rol en la investigación criminal en el país. 
+
+El análiss se centrará en la visualización de datos mediante herramientas estadísticas, con el objetivo de generar gráficos que faciliten su interpretación y permitan identificar patrones relevantes.
 
 
 ## Gráficos univariables (una sola variable)
 
-Distribucion de delitos por provincia (ordenados):
+# Distribucion de delitos por provincia (ordenados):
 ```{r echo=TRUE}
-ggplot(data = stats, aes(x = reorder(Provincia, Provincia, FUN = length))) +
+delitosProvincia <- ggplot(data = stats, aes(x = reorder(Provincia, Provincia, FUN = length))) +
     geom_bar(fill = "steelblue") +
     labs(title = "Distribución de delitos por provincia", x = "Provincia", y = "Cantidad") +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplotly(delitosProvincia) %>% 
+  layout(margin = list(t = 75))
 ```
 
-Al analizar esta gráfica, podemos observar que la gran mayoría de casos ocurren en San José: la capital de nuestro país. En esta provincia, se sobrepasan los 15 mil delitos, oponiéndose a las otras provincias que no llegan ni a los 10 mil. La diferencia es tan notoria que los casos en San José sobrepasan los casos de las 2 provincias anteriores combinadas (Puntarenas y Alajuela)
+Al analizar esta gráfica, podemos observar que la gran mayoría de casos ocurren en San José: la capital del país. En esta provincia, se sobrepasan los 15 mil delitos, oponiéndose a las otras provincias que no llegan ni a los 10 mil. La diferencia es tan notoria que los casos en San José sobrepasan los casos de las 2 provincias anteriores combinadas (Puntarenas y Alajuela)
 
-Distribución de delitos por categoría (ordenados):
+# Distribución de delitos por categoría (ordenados):
 ```{r echo=TRUE}
-ggplot(data = stats, aes(x = reorder(Delito, Delito, FUN = length))) +
+delitosCategoria <- ggplot(data = stats, aes(x = reorder(Delito, Delito, FUN = length))) +
     geom_bar(fill = "coral") +
     coord_flip() +
-    labs(title = "Cantidad de delitos por categoría", x = "Delitos", y = "Cantidad")
+    labs(title = "Cantidad de delitos por categoría", x = "Delitos", y = "Cantidad") 
+
+ggplotly(delitosCategoria) %>% 
+  layout(margin = list(t = 75))
 ```
 
 Observamos que el tipo de delito más común es el hurto (llegando a casi 12 mil casos), seguido por los asaltos y los robos. Alto en la tabla encontramos también los delitos cometidos en relación a los vehiculos, como lo son la tacha de vehículos y el robo de los mismos.
 
+
+# Distribución de víctimas por horas
 ```{r echo=TRUE}
-ggplot(data = stats, aes(x = Hora)) +
+delitosHora <- ggplot(data = stats, aes(x = Hora)) +
     geom_bar(fill = "green") +
     labs(title = "Víctimas por Hora", x = "Hora", y = "Cantidad") +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
+ggplotly(delitosHora) %>% 
+  layout(margin = list(t = 75))
 ```
 
-xd
+Este gráfico nos muestra que gran parte de los crimenes se cometen durante la madrugada, entre las 00:00 y las 02:59, llegando a más de 7500 delitos cometidos durante esas horas. Otro intervalo peligroso puede ser entre las 18:00 y las 20:59, otro horario nocturno, donde la cantidad de luz disponible es usualmente limitada.
+
+
+## Gráficos bidimensionales (dos variables)
+
+# Tipo de delito según el género de la víctima
+```{r echo=TRUE}
+delitosGeneroVictima <- ggplot(data = stats, aes(x = reorder(Delito, Delito, FUN = length), fill = Sexo)) +
+    geom_bar(position = "stack") +
+    coord_flip() +
+    labs(title = "Tipo de delito según el género de la víctima", x="Delito", y="Género")
+ggplotly(delitosGeneroVictima) %>%
+  layout(margin = list(t = 75))
+```
+
+Podemos observar que, en la gran mayoría de delitos, los hombres son las víctimas principales, pero no por un margen significativo: esto quiere decir que los crimenes más comunes son cometidos tanto en contra de hombres como mujeres, sin que su género sea un factor relevante. Sin embargo, se destaca que las mujeres son considerablemente más propensas a ser víctimas de un delito sexual en comparación a los hombres. 
+
+# Tipo de delito según la provincia
+```{r echo=TRUE}
+delitosProvinciaVictima <- ggplot(data = stats, aes(x = reorder(Delito, Delito, FUN = length), fill = Provincia)) +
+    geom_bar(position = "stack") +
+    coord_flip() +
+    labs(title = "Tipo de delito según la provincia", x="Delito", y="Provincia")
+ggplotly(delitosProvinciaVictima) %>%
+  layout(margin = list(t = 75))
+```
+
+
+## Gráfica multidimensional (cinco variables)
+
+# TODO: TERMINAR EL GRÁFICO MULTIVARIABLE
+# Características de las víctimas en función del delito en su contra
+```{r echo=TRUE}
+ggplot(stats, aes(x = Delito, fill = Sexo)) +
+  geom_bar() +
+  labs(title = "Características de las víctimas en función del delito en su contra", x = "Delito", y = "Cantidad") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
 
 ## Referencias
 <https://sitiooij.poder-judicial.go.cr/index.php/ayuda/servicios-policiales/servicios-a-organizaciones/indice-de-transparencia-del-sector-publico-costarricense/datos-abiertos>
