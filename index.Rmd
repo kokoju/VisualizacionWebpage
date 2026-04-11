@@ -102,14 +102,24 @@ ggplotly(delitosProvinciaVictima) %>%
 
 ## Gráfica multidimensional (cinco variables)
 
-# TODO: TERMINAR EL GRÁFICO MULTIVARIABLE
-# Características de las víctimas en función del delito en su contra
-```{r echo=TRUE}
-ggplot(stats, aes(x = Delito, fill = Sexo)) +
-  geom_bar() +
-  labs(title = "Características de las víctimas en función del delito en su contra", x = "Delito", y = "Cantidad") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+# Características de las víctimas en función del delito y la hora
+```{r echo=TRUE, fig.width=16, fig.height=10, warning=FALSE}
+ggplot(stats, aes(x = Delito, y = Hora, colour = Sexo, shape = Edad, size = as.character(Victima))) +
+  geom_point(position = position_jitter(width = 0.05, height = 0.3), alpha = 0.6) +
+  scale_y_discrete(expand = expansion(add = 0.8)) +  # + márgen al eje y
+  scale_x_discrete(expand = expansion(add = 2)) +  # + márgen al eje x
+  coord_flip() +
+  labs(title = "Características de las víctimas en función del delito y la hora", x = "Delito", y = "Hora")
+
 ```
+
+Una gráfica multidimensional permite observar gran cantidad de datos, pero puede dificultar la lectura debido a la sobrecarga de estos. Aún así, esta gráfica en particular nos permite ver la proporción de personas atacadas en función de las horas y el delito. Además, presenta información interesante códificada por medio de atributos visuales, como lo son el género, la edad el tipo de víctima.
+
+
+## Conclusiones
+
+Una vez finalizado nuestro trabajo, podemos concluir que la visualización de información no solo facilita la comprensión de datos que, en su forma natural, pueden resultar difíciles de interpretar, sino que también permite identificar patrones, tendencias y relaciones relevantes a partir del análisis de las gráficas generadas. Sin embargo, es fundamental considerar el tipo de datos y el objetivo del análisis al seleccionar una visualización, ya que un gráfico inadecuado o con visuales poco claros puede llevar a interpretaciones erróneas y afectar negativamente la comprensión del lector.
+
 
 
 ## Referencias
