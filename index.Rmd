@@ -117,7 +117,7 @@ ggplot(stats, aes(x = Delito, y = Hora, colour = Sexo, shape = Edad, size = as.c
 Una gráfica multidimensional permite observar gran cantidad de datos, pero puede dificultar la lectura debido a la sobrecarga de estos. Aún así, esta gráfica en particular nos permite ver la proporción de personas atacadas en función de las horas y el delito. Además, presenta información interesante códificada por medio de atributos visuales, como lo son el género, la edad el tipo de víctima.
 
 ## Facetas
-
+# Análisis de Delitos por Provincia
 ```{r echo=TRUE, fig.height=15, fig.width=10}
 library(plotly)
 datos_completos <- stats %>% 
@@ -143,23 +143,18 @@ Podemos observar que, en la gran mayoría de provincias como Alajuela, Cartago, 
 
 ## Imagen Compuesta
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-fig_compuesta <- subplot(
-  subplot(delitosProvincia, delitosHora, nrows = 1, margin = 0.1, titleX = TRUE), 
-  delitosCategoria,                                                         # Fila
-  nrows = 2, 
-  heights = c(0.3, 0.6), 
-  margin = 0.08,
-  titleY = TRUE,
-  titleX = TRUE
-) %>%
-  layout(
-    title = "Análisis Comparativo de Criminalidad",
-    margin = list(t = 100, b = 50, l = 150, r = 50),
-    showlegend = FALSE
-  )
+# Análisis Comparativo de Delitos
 
-fig_compuesta
+```{r echo=TRUE, message=FALSE, warning=FALSE, fig.width=14, fig.height=10}
+figCompuesta <- subplot(
+  subplot(delitosProvincia, delitosHora, nrows = 1, margin = 0.12,titleX = TRUE),
+  delitosCategoria,nrows = 2,heights = c(0.42, 0.58),margin = 0.12,titleY = TRUE,
+  titleX = TRUE) %>%
+  layout(
+    title = list(text = "Análisis Comparativo de Delitos",y = 0.98),
+    margin = list(t = 100, b = 80, l = 120, r = 40)) %>% config(responsive = TRUE)
+
+figCompuesta
 ```
 Una ventaja fundamental de utilizar esta imagen compuesta es que permite ver la relación de todo al mismo tiempo. Al tener las tres gráficas en un solo panel, podemos observar rapidamente si el total de delitos por provincia coincide con las horas más peligrosas o el género más común de las victimas. En este caso, los datos revelen que la mayor cantidad de delitos se regista en las horas de la noche o madrugada, disminuyendo en la mañana. Asimismo, la visualización permite determinar que el delito "Hurto" es el que presenta la cifra más alta de víctimas a nivel nacional.
 
