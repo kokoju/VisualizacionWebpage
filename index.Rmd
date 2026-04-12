@@ -165,4 +165,9 @@ Una vez finalizado nuestro trabajo, podemos concluir que la visualización de in
 
 
 ## Referencias
-<https://sitiooij.poder-judicial.go.cr/index.php/ayuda/servicios-policiales/servicios-a-organizaciones/indice-de-transparencia-del-sector-publico-costarricense/datos-abiertos>
+“Datos Abiertos”, Organismo de Investigación Judicial. En línea, disponible en: <https://sitiooij.poder-judicial.go.cr/index.php/ayuda/servicios-policiales/servicios-a-organizaciones/indice-de-transparencia-del-sector-publico-costarricense/datos-abiertos>
+
+“Create Elegant Data Visualisations Using the Grammar of Graphics”, ggplot2. En línea, disponible en: <https://ggplot2.tidyverse.org/index.html>
+
+“ggplotly: Convert ggplot2 to plotly in plotly: Create Interactive Web Graphics via 'plotly.js'”, R Package Documentation. En línea, disponible en:
+<https://rdrr.io/cran/plotly/man/ggplotly.html>
